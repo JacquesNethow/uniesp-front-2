@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Luxo - Mensagens</title>
+    <link rel="shortcut icon" href="images/barco2.png" type="image/x-icon" />
+    <link rel="stylesheet" href="css/default.css" />
+</head>
+
+<body>
+    <div class="page">
+        <header>
+            <div id="title">
+                <img src="images/barco1.png" alt="ícone de barco" />
+                <div class="headtitle">
+                    <h1>Luxo</h1>
+                    <h2>Aluguel de iates</h2>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="pagtitle">
+                <div class="bgtitle"></div>
+                <h2>Mensagens recebidas</h2>
+            </div>
+
+            <table id="tabelaMensagens">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Mensagem</th>
+                    </tr>
+                </thead>
+                <tbody id="corpoTabela">
+                </tbody>
+            </table>
+        </main>
+    </div>
+
+    <footer>
+        <p>© 2023 por Luxo aluguel de iates</p>
+    </footer>
+
+    <script src="js/jquery-3.6.4.min.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        function verificarAcesso() {
+            const autorizado = sessionStorage.getItem("autorizado");
+
+            if (autorizado !== "true") {
+                window.location.href = "admin.html";
+                return false;
+            }
+
+            return true;
+        }
+
+        function carregarMensagens() {
+            const mensagens = obterMensagens();
+            const corpo = document.getElementById("corpoTabela");
+
+            if (!mensagens || mensagens.length === 0) {
+                corpo.innerHTML = `
+            <tr>
+              <td colspan="3">Nenhuma mensagem encontrada</td>
+            </tr>`;
+                return;
+            }
+
+            mensagens.forEach(function (item) {
+                const linha = document.createElement("tr");
+
+                linha.innerHTML = `
+            <td>${item.nome}</td>
+            <td>${item.email}</td>
+            <td>${item.mensagem}</td>`;
+
+                corpo.appendChild(linha);
+            });
+        }
+
+        function inicializar() {
+            if (verificarAcesso()) {
+                carregarMensagens();
+            }
+        }
+
+        inicializar();
+    </script>
+</body>
+
+</html>
